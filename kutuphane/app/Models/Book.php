@@ -6,9 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
-    protected $fillable = ['kitap_adi', 'yazar', 'ISBN', 'image'];
+    protected $fillable = ['kitap_adi', 'yazar_id', 'ISBN', 'image'];
+    
     public function favoritedBy()
     {
         return $this->belongsToMany(User::class, 'favorite_books');
+    }
+    
+    public function yazar()
+    {
+        return $this->belongsTo(Yazar::class);
     }
 }

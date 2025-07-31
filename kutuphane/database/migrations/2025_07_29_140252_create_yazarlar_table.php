@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('yazarlar', function (Blueprint $table) {
             $table->id();
-            $table->string('kitap_adi');
-            $table->foreignId('yazar_id')->constrained('yazarlar')->onDelete('cascade');
-            $table->string('ISBN');
-            $table->string('image');
+            $table->string('isim');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books');
+        Schema::dropIfExists('yazarlar');
     }
 };

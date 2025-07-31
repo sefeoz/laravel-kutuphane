@@ -15,7 +15,7 @@
     <tr>
         <tr>
             <th scope="row">Yazar</th>
-            <td>{{$book->yazar}}</td>
+            <td>{{$book->yazar->isim}}</td>
         </tr>
         <tr>
       <th scope="row">ISBN</th>

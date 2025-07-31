@@ -34,7 +34,7 @@
                     <tr>
                         <td>{{ $book->id }}</td>
                         <td>{{ $book->kitap_adi }}</td>
-                        <td>{{ $book->yazar }}</td>
+                        <td>{{ $book->yazar->isim }}</td>
                         <td>{{ $book->ISBN }}</td>
                         <td>
                             <a href="{{ route('books.show', $book->id) }}" class="btn btn-info">Detay</a>

@@ -25,4 +25,4 @@ class AdminMiddleware
         return redirect()->route('dashboard')->with('error', 'Bu sayfaya erişim yetkiniz yok. Sadece admin kullanıcıları erişebilir.');
                     
     }
-}
+} 

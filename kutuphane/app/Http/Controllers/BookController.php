@@ -51,7 +51,7 @@ class BookController extends Controller
     }
     public function search(Request $request){
         $search = $request->input('search');
-        $books = Book::where('kitap_adi', 'like', "%$search%")->orWhere('yazar', 'like', "%$search%")->orWhere('ISBN', 'like', "%$search%")->get();
+        $books = Book::where('kitap_adi', 'like', "%$search%")->orWhere('yazar_id', 'like', "%$search%")->orWhere('ISBN', 'like', "%$search%")->get();
         return view('books.index', compact('books'));
     }
     public function addToFavorite(Book $book){
