@@ -14,7 +14,7 @@
                 <span class="navbar-text me-3">
                     Hoşgeldin, {{ Auth::user()->name }}!
                 </span>
-                <span class="badge badge-primary me-3">{{Auth::user()->role}}</span>
+                <span class="badge badge-primary me-3 text-white">{{Auth::user()->role}}</span>
                 <form action="{{ route('logout') }}" method="post" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-outline-light btn-sm">Çıkış Yap</button>
@@ -52,7 +52,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Favori Kitaplarım</h5>
                                 <p class="card-text">Favori Kitaplarımı Görüntüle</p>
-                                <a href="{{ route('books.favorite') }}" class="btn btn-primary">Favori Kitaplarımı Görüntüle</a>
+                                <a href="{{ route('books.favorite') }}" class="btn btn-primary ">Favori Kitaplarımı Görüntüle</a>
                             </div>
                         </div>
                     </div>
