@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Book extends Model
+{
+    protected $fillable = ['kitap_adi', 'yazar', 'ISBN', 'image'];
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'favorite_books');
+    }
+}
