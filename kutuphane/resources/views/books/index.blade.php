@@ -26,6 +26,7 @@
                     <th>Kitap Adı</th>
                     <th>Yazar</th>
                     <th>ISBN</th>
+                    <th>Satış Yerleri</th>
                     <th>İşlemler</th>
                 </tr>
             </thead>
@@ -36,6 +37,17 @@
                         <td>{{ $book->kitap_adi }}</td>
                         <td>{{ $book->yazar->isim }}</td>
                         <td>{{ $book->ISBN }}</td>
+                        <td>
+                            @if($book->stores->count() > 0)
+                                <small>
+                                    @foreach($book->stores as $store)
+                                        <span class="badge bg-primary">{{$store->name}}</span>
+                                    @endforeach
+                                </small>
+                            @else
+                                <span class="text-muted">Satış yeri yok</span>
+                            @endif
+                        </td>
                         <td>
                             <a href="{{ route('books.show', $book->id) }}" class="btn btn-info">Detay</a>
                             @if(auth()->user()->role === 'admin')

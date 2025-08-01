@@ -23,9 +23,14 @@ class BookUpdateRequest extends FormRequest
     {
         return [
             "kitap_adi" => "required|string|max:255",
-            "yazar" => "required|string|max:255",
+            "yazar_id" => "required|exists:yazarlar,id",
             "ISBN" => "required|string|max:255",
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048",
+            "stores" => "nullable|array",
+            "stores.*" => "exists:stores,id",
+            "prices.*" => "nullable|numeric|min:0",
+            "stock.*" => "nullable|integer|min:0",
+            "is_active.*" => "nullable|boolean",
         ];
     }
 }

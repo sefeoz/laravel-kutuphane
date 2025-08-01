@@ -17,4 +17,11 @@ class Book extends Model
     {
         return $this->belongsTo(Yazar::class);
     }
+    
+    public function stores()
+    {
+        return $this->belongsToMany(Store::class, 'book_store')
+                    ->withPivot('price', 'stock', 'is_active')
+                    ->withTimestamps();
+    }
 }

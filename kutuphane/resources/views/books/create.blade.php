@@ -26,7 +26,12 @@
         </div>
         <div class="form-group mb-3">
             <label for="yazar">Yazar</label>
-            <input type="text" name="yazar" class="form-control" required>
+            <select name="yazar_id" class="form-control" required>
+                <option value="">Yazar Seçin</option>
+                @foreach($yazarlar as $yazar)
+                <option value="{{$yazar->id}}">{{$yazar->isim}}</option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group mb-3">
             <label for="ISBN">ISBN</label>
@@ -36,6 +41,37 @@
             <label for="image">Resim</label>
             <input type="file" name="image" class="form-control">
         </div>
+        
+        <div class="form-group mb-3">
+            <label>Satış Yerleri</label>
+            @foreach($stores as $store)
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input type="checkbox" name="stores[]" value="{{$store->id}}" class="form-check-input" id="store_{{$store->id}}">
+                            <label class="form-check-label" for="store_{{$store->id}}">
+                                <strong>{{$store->name}}</strong> - {{$store->address}}
+                            </label>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <input type="number" name="prices[{{$store->id}}]" placeholder="Fiyat (TL)" class="form-control" step="0.01">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="number" name="stock[{{$store->id}}]" placeholder="Stok Adedi" class="form-control" min="0">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" name="is_active[{{$store->id}}]" value="1" class="form-check-input" checked>
+                                    <label class="form-check-label">Aktif</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        
         <button type="submit" class="btn btn-primary">Kaydet</button>
         <a href="{{ route('books.index') }}" class="btn btn-secondary">İptal</a>
     </form>
