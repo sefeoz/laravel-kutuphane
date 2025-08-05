@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\YazarlarController;
+use App\Http\Controllers\AuthorController;
 
 Route::get('/', function () {
     return view('index');
@@ -24,7 +24,7 @@ Route::get('/dashboard', function (){
 //admin routes
 Route::middleware(['auth', 'admin'])->group(function(){
     Route::resource('users', UserController::class);
-    Route::resource('yazarlar', YazarlarController::class);
+    Route::resource('authors', AuthorController::class);
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('books.edit');
@@ -40,5 +40,5 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/books/{book}/favorite', [BookController::class, 'addToFavorite'])->name('books.addToFavorite');
     Route::delete('/books/{book}/favorite', [BookController::class, 'removeFromFavorite'])->name('books.removeFromFavorite');
     Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
-    Route::get('/yazarlar/search', [YazarlarController::class, 'search'])->name('yazarlar.search');
+    Route::get('/authors/search', [AuthorController::class, 'search'])->name('authors.search');
 });

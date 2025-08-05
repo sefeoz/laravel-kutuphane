@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Yazar extends Model
+class Author extends Model
 {
-    protected $table = 'yazarlar';
-    protected $fillable = ['isim'];
+    protected $table = 'authors';
+    protected $fillable = ['name'];
     
     public function books(){
         return $this->hasMany(Book::class);

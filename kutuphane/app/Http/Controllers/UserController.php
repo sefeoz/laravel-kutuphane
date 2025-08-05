@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -45,8 +46,8 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route("users.index")->with("success", "User deleted successfully");
     }
-    public function show($id){
-        $user = User::find($id);
-        return view("users.show", compact("user"));
+    public function show(string $id) : View{
+        $user = User::findOrFail($id);
+        return view("users.show", ["user" => $user]);
     }
 }

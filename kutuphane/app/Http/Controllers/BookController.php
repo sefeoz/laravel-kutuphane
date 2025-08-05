@@ -17,9 +17,9 @@ class BookController extends Controller
         return view('books.index', compact('books'));
     }
     public function create(){
-        $yazarlar = \App\Models\Yazar::all();
+        $authors = \App\Models\Author::all();
         $stores = \App\Models\Store::all();
-        return view('books.create', compact('yazarlar', 'stores'));
+        return view('books.create', compact('authors', 'stores'));
     }
     public function store(BookStoreRequest $request){
         try {
@@ -46,9 +46,9 @@ class BookController extends Controller
     }
     public function edit($id){
         $book = Book::findOrFail($id);
-        $yazarlar = \App\Models\Yazar::all();
+        $authors = \App\Models\Author::all();
         $stores = \App\Models\Store::all();
-        return view('books.edit', compact('book', 'yazarlar', 'stores'));
+        return view('books.edit', compact('book', 'authors', 'stores'));
     }
     public function update(BookUpdateRequest $request, $id){
         try {
@@ -93,9 +93,9 @@ class BookController extends Controller
     }
     public function search(Request $request){
         $search = $request->input('search');
-        $books = Book::where('kitap_adi', 'like', "%$search%")
-            ->orWhereHas('yazar', function($query) use ($search) {
-                $query->where('isim', 'like', "%$search%");
+        $books = Book::where('book_name', 'like', "%$search%")
+            ->orWhereHas('author', function($query) use ($search) {
+                $query->where('name', 'like', "%$search%");
             })
             ->orWhere('ISBN', 'like', "%$search%")
             ->orWhereHas('stores', function($query) use ($search) {

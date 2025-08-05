@@ -61,7 +61,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Yazarlar</h5>
                                 <p class="card-text">Yazarları görüntüle ve yönet</p>
-                                <a href="{{ route('yazarlar.index') }}" class="btn btn-primary">Yazarlara Git</a>
+                                <a href="{{ route('authors.index') }}" class="btn btn-primary">Yazarlara Git</a>
                             </div>
                         </div>
                     </div>

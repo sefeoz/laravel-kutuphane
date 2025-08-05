@@ -34,8 +34,8 @@
                 @foreach($books as $book)
                     <tr>
                         <td>{{ $book->id }}</td>
-                        <td>{{ $book->kitap_adi }}</td>
-                        <td>{{ $book->yazar->isim }}</td>
+                        <td>{{ $book->book_name }}</td>
+                        <td>{{ $book->author->name }}</td>
                         <td>{{ $book->ISBN }}</td>
                         <td>
                             @if($book->stores->count() > 0)

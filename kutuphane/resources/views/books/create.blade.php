@@ -22,14 +22,14 @@
         @csrf
         <div class="form-group mb-3">
             <label for="kitap_adi">Kitap Adı</label>
-            <input type="text" name="kitap_adi" class="form-control" required>
+            <input type="text" name="book_name" class="form-control" required>
         </div>
         <div class="form-group mb-3">
             <label for="yazar">Yazar</label>
-            <select name="yazar_id" class="form-control" required>
+            <select name="author_id" class="form-control" required>
                 <option value="">Yazar Seçin</option>
-                @foreach($yazarlar as $yazar)
-                <option value="{{$yazar->id}}">{{$yazar->isim}}</option>
+                    @foreach($authors as $author)
+                <option value="{{$author->id}}">{{$author->name}}</option>
                 @endforeach
             </select>
         </div>

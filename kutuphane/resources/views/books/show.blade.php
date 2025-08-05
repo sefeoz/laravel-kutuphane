@@ -10,12 +10,12 @@
   <tbody>
     <tr>
       <th scope="row">Kitap Adı</th>
-      <td>{{$book->kitap_adi}}</td>
+      <td>{{$book->book_name}}</td>
     </tr>
     <tr>
         <tr>
             <th scope="row">Yazar</th>
-            <td>{{$book->yazar->isim}}</td>
+            <td>{{$book->author->name}}</td>
         </tr>
         <tr>
       <th scope="row">ISBN</th>
