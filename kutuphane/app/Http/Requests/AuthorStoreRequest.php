@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 
-class YazarlarStoreRequest extends FormRequest
+class AuthorStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class YazarlarStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "isim" => "required|string|max:255",
+            "name" => "required|string|max:255",
         ];
     }
 }

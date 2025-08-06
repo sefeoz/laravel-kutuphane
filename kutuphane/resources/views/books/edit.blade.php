@@ -8,13 +8,13 @@
         @method('PUT')
         <div class="form-group mb-3">
             <label for="kitap_adi">Kitap Adı</label>
-            <input type="text" class="form-control" id="kitap_adi" name="kitap_adi" value="{{$book->kitap_adi}}">
+            <input type="text" class="form-control" id="kitap_adi" name="kitap_adi" value="{{$book->book_name}}">
         </div>
         <div class="form-group mb-3">
             <label for="yazar">Yazar</label>
            <select name="yazar_id" class="form-control">
-            @foreach($yazarlar as $yazar)
-            <option value="{{$yazar->id}}" {{$book->yazar_id == $yazar->id ? 'selected' : ''}}>{{$yazar->isim}}</option>
+            @foreach($authors as $author)
+            <option value="{{$author->id}}" {{$book->author_id == $author->id ? 'selected' : ''}}>{{$author->name}}</option>
             @endforeach
            </select>
         </div>
