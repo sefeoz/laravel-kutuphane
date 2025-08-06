@@ -44,16 +44,14 @@ class BookController extends Controller
             return redirect()->back()->with('error', 'Hata: ' . $e->getMessage())->withInput();
         }
     }
-    public function edit($id){
-        $book = Book::findOrFail($id);
+    public function edit(Book $book){
         $authors = \App\Models\Author::all();
         $stores = \App\Models\Store::all();
         return view('books.edit', compact('book', 'authors', 'stores'));
     }
-    public function update(BookUpdateRequest $request, $id){
+    public function update(BookUpdateRequest $request, Book $book){
         try {
             $data = $request->validated();
-            $book = Book::findOrFail($id);
             
             if ($request->hasFile('image') && $request->file('image')->isValid()) {
                 if ($book->image) {
@@ -82,13 +80,11 @@ class BookController extends Controller
             return redirect()->back()->with('error', 'Hata: ' . $e->getMessage())->withInput();
         }
     }
-    public function destroy($id){
-        $book = Book::findOrFail($id);
+    public function destroy(Book $book){
         $book->delete();
         return redirect()->route('books.index');
     }
-    public function show($id){
-        $book = Book::findOrFail($id);
+    public function show(Book $book){
         return view('books.show', compact('book'));
     }
     public function search(Request $request){

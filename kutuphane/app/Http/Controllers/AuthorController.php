@@ -20,21 +20,17 @@ class AuthorController extends Controller
         Author::create($request->all());
         return redirect()->route('authors.index')->with('success', 'Yazar başarıyla eklendi');
     }
-    public function show($id){
-        $author = Author::findOrFail($id);
+    public function show(Author $author){
         return view('authors.show', compact('author'));
     }
-    public function edit($id){
-        $author = Author::findOrFail($id);
+    public function edit(Author $author){
         return view('authors.edit', compact('author'));
     }
-    public function update(AuthorUpdateRequest $request, $id){
-        $author = Author::findOrFail($id);
+    public function update(AuthorUpdateRequest $request, Author $author){
         $author->update($request->all());
         return redirect()->route('authors.index')->with('success', 'Yazar başarıyla güncellendi');
     }
-    public function destroy($id){
-        $author = Author::findOrFail($id);
+    public function destroy(Author $author){
         $author->delete();
         return redirect()->route('authors.index')->with('success', 'Yazar başarıyla silindi');
     }

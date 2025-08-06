@@ -25,12 +25,10 @@ class UserController extends Controller
         $user = User::create($data);
         return redirect()->route("users.index")->with("success", "User created successfully");
     }
-    public function edit($id){
-        $user = User::find($id);
+    public function edit(User $user){
         return view("users.edit", compact("user"));
     }
-    public function update(UserUpdateRequest $request, $id){
-        $user = User::find($id);
+    public function update(UserUpdateRequest $request, User $user){
         $data = $request->validated();
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
@@ -41,13 +39,11 @@ class UserController extends Controller
         $user->update($data);
         return redirect()->route("users.index")->with("success", "User updated successfully");
     }
-    public function destroy($id){
-        $user = User::find($id);
+    public function destroy(User $user){
         $user->delete();
         return redirect()->route("users.index")->with("success", "User deleted successfully");
     }
-    public function show(string $id) : View{
-        $user = User::findOrFail($id);
+    public function show(User $user) : View{
         return view("users.show", ["user" => $user]);
     }
 }
