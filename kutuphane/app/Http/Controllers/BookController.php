@@ -7,21 +7,25 @@ use App\Models\Book;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\BookStoreRequest;
 use App\Http\Requests\BookUpdateRequest;
-
+use Illuminate\Http\RedirectResponse;  
+use Illuminate\View\View;
 
 class BookController extends Controller
 {
-    public function index(){
+    public function index() : View
+    {
         $books = Book::all();
         $stores = \App\Models\Store::all();
         return view('books.index', compact('books'));
     }
-    public function create(){
+    public function create() : View
+    {
         $authors = \App\Models\Author::all();
         $stores = \App\Models\Store::all();
         return view('books.create', compact('authors', 'stores'));
     }
-    public function store(BookStoreRequest $request){
+    public function store(BookStoreRequest $request) : RedirectResponse
+    {
         try {
             $data = $request->validated();
             if ($request->hasFile('image') && $request->file('image')->isValid()) { 
@@ -44,12 +48,14 @@ class BookController extends Controller
             return redirect()->back()->with('error', 'Hata: ' . $e->getMessage())->withInput();
         }
     }
-    public function edit(Book $book){
+    public function edit(Book $book) : View
+    {
         $authors = \App\Models\Author::all();
         $stores = \App\Models\Store::all();
         return view('books.edit', compact('book', 'authors', 'stores'));
     }
-    public function update(BookUpdateRequest $request, Book $book){
+    public function update(BookUpdateRequest $request, Book $book) : RedirectResponse
+    {
         try {
             $data = $request->validated();
             
@@ -80,14 +86,17 @@ class BookController extends Controller
             return redirect()->back()->with('error', 'Hata: ' . $e->getMessage())->withInput();
         }
     }
-    public function destroy(Book $book){
+    public function destroy(Book $book) : RedirectResponse
+    {
         $book->delete();
         return redirect()->route('books.index');
     }
-    public function show(Book $book){
+    public function show(Book $book) : View
+    {
         return view('books.show', compact('book'));
     }
-    public function search(Request $request){
+    public function search(Request $request) : View
+    {
         $search = $request->input('search');
         $books = Book::where('book_name', 'like', "%$search%")
             ->orWhereHas('author', function($query) use ($search) {
@@ -100,15 +109,18 @@ class BookController extends Controller
             ->get();
         return view('books.index', compact('books'));
     }
-    public function addToFavorite(Book $book){
+    public function addToFavorite(Book $book) : RedirectResponse
+    {
         auth()->user()->favoriteBooks()->attach($book->id);
         return redirect()->back()->with('success', 'Kitap favorilere eklendi');
     }
-    public function removeFromFavorite(Book $book){
+    public function removeFromFavorite(Book $book) : RedirectResponse
+    {
         auth()->user()->favoriteBooks()->detach($book->id);
         return redirect()->back()->with('success', 'Kitap favorilerden kaldırıldı');
     }
-    public function showFavoriteBooks(){
+    public function showFavoriteBooks() : View
+    {
         $favoriteBooks = auth()->user()->favoriteBooks;
         return view('books.favorite', compact('favoriteBooks'));
     }

@@ -2,8 +2,8 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center">
-        @if(auth()->user()->role === 'admin')
         <a href="{{route('dashboard')}}" class="btn btn-secondary">Geri Dön</a>
+        @if(auth()->user()->role === 'admin')
         <a href="{{ route('authors.create') }}" class="btn btn-primary">Yazar Ekle</a>
         @endif
         <h1>Yazarlar</h1>

@@ -9,26 +9,32 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-    public function index(){
+    public function index() : View
+    {
         $users = User::all();
         return view("users.index", compact("users"));
     }
-    public function create(){
+    public function create() : View
+    {
         return view("users.create");
     }
-    public function store(UserStoreRequest $request){
+    public function store(UserStoreRequest $request) : RedirectResponse
+    {
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
         return redirect()->route("users.index")->with("success", "User created successfully");
     }
-    public function edit(User $user){
+    public function edit(User $user) : View
+    {
         return view("users.edit", compact("user"));
     }
-    public function update(UserUpdateRequest $request, User $user){
+    public function update(UserUpdateRequest $request, User $user) : RedirectResponse
+    {
         $data = $request->validated();
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
@@ -39,7 +45,8 @@ class UserController extends Controller
         $user->update($data);
         return redirect()->route("users.index")->with("success", "User updated successfully");
     }
-    public function destroy(User $user){
+    public function destroy(User $user) : RedirectResponse
+    {
         $user->delete();
         return redirect()->route("users.index")->with("success", "User deleted successfully");
     }

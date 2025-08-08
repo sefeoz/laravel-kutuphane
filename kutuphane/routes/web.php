@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BulkImportController;
 
 Route::get('/', function () {
     return view('index');
@@ -30,6 +31,12 @@ Route::middleware(['auth', 'admin'])->group(function(){
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+    
+    // Bulk Import Routes
+    Route::get('/bulk-import', [BulkImportController::class, 'index'])->name('bulk-import.index');
+    Route::post('/bulk-import', [BulkImportController::class, 'store'])->name('bulk-import.store');
+    Route::get('/bulk-import/history', [BulkImportController::class, 'history'])->name('bulk-import.history');
+    Route::get('/bulk-import/{id}', [BulkImportController::class, 'show'])->name('bulk-import.show');
 });
 
 //book routes
