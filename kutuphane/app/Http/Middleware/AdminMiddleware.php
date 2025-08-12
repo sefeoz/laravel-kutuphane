@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\UserRole;
 
 class AdminMiddleware
 {
@@ -19,7 +20,7 @@ class AdminMiddleware
         if(!Auth::check()){
             return redirect()->route('login')->with('error', 'Giriş yapmanız gerekiyor.');
         }
-        if(Auth::check() && Auth::user()->role === 'admin'){
+        if(Auth::check() && Auth::user()->role === UserRole::Admin->value){
             return $next($request);
         }
         return redirect()->route('dashboard')->with('error', 'Bu sayfaya erişim yetkiniz yok. Sadece admin kullanıcıları erişebilir.');

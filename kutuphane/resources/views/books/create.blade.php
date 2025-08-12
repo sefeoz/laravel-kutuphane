@@ -44,25 +44,28 @@
         
         <div class="form-group mb-3">
             <label>Satış Yerleri</label>
+            @if($stores->count() === 0)
+                <div class="alert alert-warning">Henüz satış yeri yok. Önce mağaza ekleyin.</div>
+            @endif
             @foreach($stores as $store)
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="form-check">
-                            <input type="checkbox" name="stores[]" value="{{$store->id}}" class="form-check-input" id="store_{{$store->id}}">
+                            <input type="checkbox" name="stores[{{$store->id}}][attach]" value="1" class="form-check-input" id="store_{{$store->id}}">
                             <label class="form-check-label" for="store_{{$store->id}}">
                                 <strong>{{$store->name}}</strong> - {{$store->address}}
                             </label>
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-4">
-                                <input type="number" name="prices[{{$store->id}}]" placeholder="Fiyat (TL)" class="form-control" step="0.01">
+                                <input type="number" name="stores[{{$store->id}}][price]" placeholder="Fiyat (TL)" class="form-control" step="0.01">
                             </div>
                             <div class="col-md-4">
-                                <input type="number" name="stock[{{$store->id}}]" placeholder="Stok Adedi" class="form-control" min="0">
+                                <input type="number" name="stores[{{$store->id}}][stock]" placeholder="Stok Adedi" class="form-control" min="0">
                             </div>
                             <div class="col-md-4">
                                 <div class="form-check">
-                                    <input type="checkbox" name="is_active[{{$store->id}}]" value="1" class="form-check-input" checked>
+                                    <input type="checkbox" name="stores[{{$store->id}}][is_active]" value="1" class="form-check-input" checked>
                                     <label class="form-check-label">Aktif</label>
                                 </div>
                             </div>

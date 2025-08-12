@@ -11,7 +11,7 @@ class BookStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->role === 'admin';
+        return auth()->check() && auth()->user()->role === \App\Enums\UserRole::Admin->value;
     }
 
     /**
@@ -22,15 +22,15 @@ class BookStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "kitap_adi" => "required|string|max:255",
-            "yazar_id" => "required|exists:yazarlar,id",
+            "book_name" => "required|string|max:255",
+            "author_id" => "required|exists:authors,id",
             "ISBN" => "required|string|max:255",
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048",
             "stores" => "nullable|array",
-            "stores.*" => "exists:stores,id",
-            "prices.*" => "nullable|numeric|min:0",
-            "stock.*" => "nullable|integer|min:0",
-            "is_active.*" => "nullable|boolean",
+            "stores.*.attach" => "nullable|boolean",
+            "stores.*.price" => "nullable|numeric|min:0",
+            "stores.*.stock" => "nullable|integer|min:0",
+            "stores.*.is_active" => "nullable|boolean",
         ];
     }
 }

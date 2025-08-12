@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         // Admin kullanıcısını ekle
         $this->call([
             AdminUserSeeder::class,
+            StoreSeeder::class,
             YazarVeKitapSeeder::class,
         ]);
     }

@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ImportHistory;
-use App\Jobs\ImportAuthorsJob;
+use App\Jobs\ImportAuthorListJob;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Enums\ImportStatus;
 
 class BulkImportController extends Controller
 {
@@ -30,14 +31,10 @@ class BulkImportController extends Controller
 
         $importHistory = ImportHistory::create([
             'filename' => $originalName,
-            'status' => 'pending',
-            'total_records' => 0,
-            'processed_records' => 0,
-            'successful_records' => 0,
-            'failed_records' => 0,
+            'status' => ImportStatus::Pending->value,
         ]);
 
-        ImportAuthorsJob::dispatch($fullPath, $importHistory->id);
+        ImportAuthorListJob::dispatch($fullPath, $importHistory->id);
 
         return redirect()->route('bulk-import.history')
             ->with('success', 'Import işlemi başlatıldı. İşlem tamamlandığında bilgilendirileceksiniz.');

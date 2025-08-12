@@ -14,7 +14,7 @@ class BookController extends Controller
 {
     public function index() : View
     {
-        $books = Book::all();
+        $books = Book::with(['author', 'stores'])->get();
         $stores = \App\Models\Store::all();
         return view('books.index', compact('books'));
     }
@@ -32,16 +32,21 @@ class BookController extends Controller
                 $data['image'] = $request->file('image')->store('images', 'public');
             }
             $book = Book::create($data);
-                if($request->has('stores') && is_array($request->stores)){
-                $stores = [];
-                foreach($request->stores as $store_id){
-                    $stores[$store_id] = [
-                        'price' => $request->input("prices.{$store_id}"),
-                        'stock' => $request->input("stock.{$store_id}", 0),
-                        'is_active' => $request->has("is_active.{$store_id}")
+            if ($request->has('stores') && is_array($request->stores)) {
+                $storesToAttach = [];
+                foreach ($request->input('stores', []) as $storeId => $payload) {
+                    if (!(isset($payload['attach']) && $payload['attach'])) {
+                        continue;
+                    }
+                    $storesToAttach[$storeId] = [
+                        'price' => $payload['price'] ?? null,
+                        'stock' => isset($payload['stock']) ? (int) $payload['stock'] : 0,
+                        'is_active' => isset($payload['is_active']) && (bool) $payload['is_active'],
                     ];
                 }
-                $book->stores()->attach($stores);
+                if (!empty($storesToAttach)) {
+                    $book->stores()->attach($storesToAttach);
+                }
             }
             return redirect()->route('books.index')->with('success', 'Kitap başarıyla oluşturuldu');
         } catch (\Exception $e) {
@@ -67,16 +72,23 @@ class BookController extends Controller
             }
             
             $book->update($data);
-                if($request->has('stores') && is_array($request->stores)){
-                $stores = [];
-                foreach($request->stores as $store_id){
-                    $stores[$store_id] = [
-                        'price' => $request->input("prices.{$store_id}"),
-                        'stock' => $request->input("stock.{$store_id}", 0),
-                        'is_active' => $request->has("is_active.{$store_id}")
+            if ($request->has('stores') && is_array($request->stores)) {
+                $storesToSync = [];
+                foreach ($request->input('stores', []) as $storeId => $payload) {
+                    if (!(isset($payload['attach']) && $payload['attach'])) {
+                        continue;
+                    }
+                    $storesToSync[$storeId] = [
+                        'price' => $payload['price'] ?? null,
+                        'stock' => isset($payload['stock']) ? (int) $payload['stock'] : 0,
+                        'is_active' => isset($payload['is_active']) && (bool) $payload['is_active'],
                     ];
                 }
-                $book->stores()->sync($stores);
+                if (!empty($storesToSync)) {
+                    $book->stores()->sync($storesToSync);
+                } else {
+                    $book->stores()->detach();
+                }
             } else {
                 $book->stores()->detach();
             }
@@ -95,18 +107,23 @@ class BookController extends Controller
     {
         return view('books.show', compact('book'));
     }
-    public function search(Request $request) : View
+    public function search(Request $request) : View|RedirectResponse
     {
         $search = $request->input('search');
-        $books = Book::where('book_name', 'like', "%$search%")
+        if(strlen($search) < 3){
+            return redirect()->route('books.index')->with('error', 'Arama kelimesi en az 3 karakter olmalıdır');
+        }else{
+        $books = Book::with(['author', 'stores'])
+            ->where('book_name', 'like', "%$search%")
             ->orWhereHas('author', function($query) use ($search) {
                 $query->where('name', 'like', "%$search%");
             })
             ->orWhere('ISBN', 'like', "%$search%")
             ->orWhereHas('stores', function($query) use ($search) {
                 $query->where('name', 'like', "%$search%");
-            })
-            ->get();
+                })
+                ->get();
+        }
         return view('books.index', compact('books'));
     }
     public function addToFavorite(Book $book) : RedirectResponse

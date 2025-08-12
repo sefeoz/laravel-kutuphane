@@ -10,6 +10,13 @@
     </div>
   
     
+    <div class="search-container">
+        <form action="{{ route('authors.search') }}" method="GET">
+            <input type="text" name="search" placeholder="Yazar ara" value="{{ $search ?? '' }}">
+            <button type="submit" class="btn btn-primary">Ara</button>
+            <a href="{{ route('authors.index') }}" class="btn btn-secondary">Temizle</a>
+        </form>
+    </div>
     <table class="table">
         <thead>
             <tr>

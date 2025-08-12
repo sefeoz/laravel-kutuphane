@@ -25,7 +25,7 @@ Route::get('/dashboard', function (){
 //admin routes
 Route::middleware(['auth', 'admin'])->group(function(){
     Route::resource('users', UserController::class);
-    Route::resource('authors', AuthorController::class);
+        Route::resource('authors', AuthorController::class)->except(['index','show']);
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
@@ -48,6 +48,6 @@ Route::middleware(['auth'])->group(function(){
     Route::delete('/books/{book}/favorite', [BookController::class, 'removeFromFavorite'])->name('books.removeFromFavorite');
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
     Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
-    Route::get('/authors/{author}', [AuthorController::class, 'show'])->name('authors.show');
     Route::get('/authors/search', [AuthorController::class, 'search'])->name('authors.search');
+    Route::get('/authors/{author}', [AuthorController::class, 'show'])->name('authors.show');
 });

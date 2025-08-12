@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\ImportHistory;
 use App\Jobs\AuthorImportJob;
+use App\DTOs\AuthorImportData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -11,8 +12,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
+use App\Enums\ImportStatus;
 
-class ImportAuthorsJob implements ShouldQueue
+class ImportAuthorListJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -34,13 +36,13 @@ class ImportAuthorsJob implements ShouldQueue
                 return;
             }
 
-            $importHistory->update(['status' => 'processing']);
+            $importHistory->update(['status' => ImportStatus::Processing->value]);
 
             $data = Excel::toArray([], $this->filePath);
             
             if (empty($data) || empty($data[0])) {
                 $importHistory->update([
-                    'status' => 'failed',
+                    'status' => ImportStatus::Failed->value,
                     'error_log' => 'Dosya boş veya okunamadı'
                 ]);
                 return;
@@ -52,7 +54,7 @@ class ImportAuthorsJob implements ShouldQueue
             $header = $rows[0];
             if (!in_array('name', array_map('strtolower', $header))) {
                 $importHistory->update([
-                    'status' => 'failed',
+                    'status' => ImportStatus::Failed->value,
                     'error_log' => 'Excel dosyasında "name" kolonları bulunamadı'
                 ]);
                 return;
@@ -72,16 +74,17 @@ class ImportAuthorsJob implements ShouldQueue
                     continue;
                 }
 
-                AuthorImportJob::dispatch($authorData, $this->importHistoryId);
+                $dto = AuthorImportData::fromArray($authorData);
+                AuthorImportJob::dispatch($dto, $this->importHistoryId);
             }
 
-            Log::info("ImportAuthorsJob tamamlandı. Toplam {$totalRecords} kayıt işleme gönderildi.");
+            Log::info("ImportAuthorListJob tamamlandı. Toplam {$totalRecords} kayıt işleme gönderildi.");
 
         } catch (\Exception $e) {
-            Log::error("ImportAuthorsJob hatası: " . $e->getMessage());
+            Log::error("ImportAuthorListJob hatası: " . $e->getMessage());
             
             ImportHistory::where('id', $this->importHistoryId)->update([
-                'status' => 'failed',
+                'status' => ImportStatus::Failed->value,
                 'error_log' => $e->getMessage()
             ]);
         }
@@ -89,11 +92,13 @@ class ImportAuthorsJob implements ShouldQueue
 
     public function failed(\Throwable $exception)
     {
-        Log::error("ImportAuthorsJob başarısız: " . $exception->getMessage());
+        Log::error("ImportAuthorListJob başarısız: " . $exception->getMessage());
         
         ImportHistory::where('id', $this->importHistoryId)->update([
-            'status' => 'failed',
+            'status' => ImportStatus::Failed->value,
             'error_log' => $exception->getMessage()
         ]);
     }
 }
+
+
