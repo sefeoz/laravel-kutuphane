@@ -8,7 +8,7 @@
         @method('PUT')
         <div class="form-group mb-3">
             <label for="kitap_adi">Kitap Adı</label>
-            <input type="text" class="form-control" id="kitap_adi" name="book_name" value="{{$book->book_name}}">
+            <input type="text" class="form-control" id="kitap_adi" name="name" value="{{$book->name}}">
         </div>
         <div class="form-group mb-3">
             <label for="yazar">Yazar</label>

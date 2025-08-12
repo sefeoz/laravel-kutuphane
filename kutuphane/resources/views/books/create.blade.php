@@ -22,7 +22,7 @@
         @csrf
         <div class="form-group mb-3">
             <label for="kitap_adi">Kitap Adı</label>
-            <input type="text" name="book_name" class="form-control" required>
+            <input type="text" name="name" class="form-control" required>
         </div>
         <div class="form-group mb-3">
             <label for="yazar">Yazar</label>

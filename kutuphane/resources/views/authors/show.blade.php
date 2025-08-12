@@ -12,7 +12,7 @@
                 <th scope="row">Kitaplar</th>
                 <td>
                     @foreach($author->books as $book)
-                    <a href="{{ route('books.show', $book->id) }}" class="btn ">{{ $book->book_name }}</a>
+                    <a href="{{ route('books.show', $book->id) }}" class="btn ">{{ $book->name }}</a>
                     <span>|</span>
                     @endforeach
                 </td>

@@ -10,7 +10,7 @@
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $book->book_name }}</h5>
+                    <h5 class="card-title">{{ $book->name }}</h5>
                     <p class="card-text">{{ $book->author->name }}</p>
                     <a href="{{ route('books.show', $book->id) }}" class="btn btn-primary">Detaylar</a>
                     <form action="{{ route('books.removeFromFavorite', $book->id) }}" method="POST" style="display: inline;">

@@ -22,7 +22,7 @@ class BookStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "book_name" => "required|string|max:255",
+            "name" => "required|string|max:255",
             "author_id" => "required|exists:authors,id",
             "ISBN" => "required|string|max:255",
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048",

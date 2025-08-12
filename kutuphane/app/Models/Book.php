@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Book extends Model
 {
-    protected $fillable = ['book_name', 'author_id', 'ISBN', 'image'];
+    protected $fillable = ['name', 'author_id', 'ISBN', 'image'];
     
     public function favoritedBy(): BelongsToMany
     {

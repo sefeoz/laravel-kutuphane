@@ -10,7 +10,7 @@
   <tbody>
     <tr>
       <th scope="row">Kitap Adı</th>
-      <td>{{$book->book_name}}</td>
+      <td>{{$book->name}}</td>
     </tr>
     <tr>
         <tr>

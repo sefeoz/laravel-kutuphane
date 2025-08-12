@@ -114,7 +114,7 @@ class BookController extends Controller
             return redirect()->route('books.index')->with('error', 'Arama kelimesi en az 3 karakter olmalıdır');
         }else{
         $books = Book::with(['author', 'stores'])
-            ->where('book_name', 'like', "%$search%")
+            ->where('name', 'like', "%$search%")
             ->orWhereHas('author', function($query) use ($search) {
                 $query->where('name', 'like', "%$search%");
             })
