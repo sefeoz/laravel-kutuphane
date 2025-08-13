@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -13,27 +14,27 @@ use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-    public function index() : View
+    public function index(): View
     {
         $users = User::all();
         return view("users.index", compact("users"));
     }
-    public function create() : View
+    public function create(): View
     {
         return view("users.create");
     }
-    public function store(UserStoreRequest $request) : RedirectResponse
+    public function store(UserStoreRequest $request): RedirectResponse
     {
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
         return redirect()->route("users.index")->with("success", "User created successfully");
     }
-    public function edit(User $user) : View
+    public function edit(User $user): View
     {
         return view("users.edit", compact("user"));
     }
-    public function update(UserUpdateRequest $request, User $user) : RedirectResponse
+    public function update(UserUpdateRequest $request, User $user): RedirectResponse
     {
         $data = $request->validated();
         if (isset($data['password']) && !empty($data['password'])) {
@@ -41,16 +42,17 @@ class UserController extends Controller
         } else {
             unset($data['password']); // Password yoksa array'den çıkar
         }
-        
+
         $user->update($data);
         return redirect()->route("users.index")->with("success", "User updated successfully");
     }
-    public function destroy(User $user) : RedirectResponse
+    public function destroy(User $user): RedirectResponse
     {
         $user->delete();
         return redirect()->route("users.index")->with("success", "User deleted successfully");
     }
-    public function show(User $user) : View{
+    public function show(User $user): View
+    {
         return view("users.show", ["user" => $user]);
     }
 }

@@ -8,7 +8,8 @@ class AuthorImportData implements \JsonSerializable
         public string $name,
         public ?string $bio = null,
         public ?string $birthDate = null,
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -33,5 +34,3 @@ class AuthorImportData implements \JsonSerializable
         return $this->toArray();
     }
 }
-
-

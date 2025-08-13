@@ -10,11 +10,11 @@ class Author extends Model
 {
     protected $table = 'authors';
     protected $fillable = ['name', 'bio', 'birth_date'];
-    
+
     protected $casts = [
         'birth_date' => 'date',
     ];
-    
+
     public function books(): HasMany
     {
         return $this->hasMany(Book::class);
@@ -29,7 +29,7 @@ class Author extends Model
             'duplicates' => [],
             'errors' => []
         ];
-        
+
         foreach ($authors as $authorData) {
             try {
                 if (!$authorData instanceof AuthorImportData) {
@@ -37,12 +37,12 @@ class Author extends Model
                 }
 
                 $name = trim($authorData->name ?? '');
-                
+
                 if (empty($name)) {
                     $results['errors'][] = 'Boş isim: ' . json_encode($authorData);
                     continue;
                 }
-                
+
                 $author = static::firstOrCreate(
                     ['name' => $name],
                     [
@@ -56,12 +56,12 @@ class Author extends Model
                 } else {
                     $results['duplicates'][] = $name;
                 }
-                
+
             } catch (\Exception $e) {
                 $results['errors'][] = "Hata: {$e->getMessage()} - " . json_encode($authorData);
             }
         }
-        
+
         return $results;
     }
 }

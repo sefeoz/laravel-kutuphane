@@ -17,13 +17,13 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Auth::check()){
+        if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Giriş yapmanız gerekiyor.');
         }
-        if(Auth::check() && Auth::user()->role === UserRole::Admin->value){
+        if (Auth::check() && Auth::user()->role === UserRole::Admin->value) {
             return $next($request);
         }
         return redirect()->route('dashboard')->with('error', 'Bu sayfaya erişim yetkiniz yok. Sadece admin kullanıcıları erişebilir.');
-                    
+
     }
-} 
+}

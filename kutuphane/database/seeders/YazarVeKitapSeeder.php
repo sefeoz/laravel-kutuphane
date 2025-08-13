@@ -112,4 +112,4 @@ class YazarVeKitapSeeder extends Seeder
 
         $this->command->info('10 yazar ve 50 kitap başarıyla eklendi!');
     }
-} 
+}

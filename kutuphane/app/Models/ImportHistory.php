@@ -16,7 +16,7 @@ class ImportHistory extends Model
         'failed_records',
         'error_log',
     ];
-    
+
     protected $casts = [
         'status' => ImportStatus::class,
         'total_records' => 'integer',
@@ -24,5 +24,5 @@ class ImportHistory extends Model
         'successful_records' => 'integer',
         'failed_records' => 'integer',
     ];
-    
+
 }

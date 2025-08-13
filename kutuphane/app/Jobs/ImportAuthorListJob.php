@@ -16,7 +16,10 @@ use App\Enums\ImportStatus;
 
 class ImportAuthorListJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $timeout = 300;
     public $tries = 3;
@@ -24,13 +27,14 @@ class ImportAuthorListJob implements ShouldQueue
     public function __construct(
         private string $filePath,
         private int $importHistoryId
-    ) {}
+    ) {
+    }
 
     public function handle()
     {
         try {
             $importHistory = ImportHistory::find($this->importHistoryId);
-            
+
             if (!$importHistory) {
                 Log::error("ImportHistory bulunamadı: {$this->importHistoryId}");
                 return;
@@ -39,7 +43,7 @@ class ImportAuthorListJob implements ShouldQueue
             $importHistory->update(['status' => ImportStatus::Processing->value]);
 
             $data = Excel::toArray([], $this->filePath);
-            
+
             if (empty($data) || empty($data[0])) {
                 $importHistory->update([
                     'status' => ImportStatus::Failed->value,
@@ -64,7 +68,7 @@ class ImportAuthorListJob implements ShouldQueue
 
             for ($i = 1; $i < count($rows); $i++) {
                 $row = $rows[$i];
-                
+
                 $authorData = [];
                 foreach ($header as $index => $column) {
                     $authorData[strtolower($column)] = $row[$index] ?? null;
@@ -82,7 +86,7 @@ class ImportAuthorListJob implements ShouldQueue
 
         } catch (\Exception $e) {
             Log::error("ImportAuthorListJob hatası: " . $e->getMessage());
-            
+
             ImportHistory::where('id', $this->importHistoryId)->update([
                 'status' => ImportStatus::Failed->value,
                 'error_log' => $e->getMessage()
@@ -93,12 +97,10 @@ class ImportAuthorListJob implements ShouldQueue
     public function failed(\Throwable $exception)
     {
         Log::error("ImportAuthorListJob başarısız: " . $exception->getMessage());
-        
+
         ImportHistory::where('id', $this->importHistoryId)->update([
             'status' => ImportStatus::Failed->value,
             'error_log' => $exception->getMessage()
         ]);
     }
 }
-
-

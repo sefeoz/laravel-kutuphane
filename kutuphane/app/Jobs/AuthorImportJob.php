@@ -15,7 +15,10 @@ use App\Enums\ImportStatus;
 
 class AuthorImportJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $timeout = 60;
     public $tries = 3;
@@ -23,7 +26,8 @@ class AuthorImportJob implements ShouldQueue
     public function __construct(
         private AuthorImportData $authorData,
         private int $importHistoryId
-    ) {}
+    ) {
+    }
 
     public function handle()
     {
@@ -66,7 +70,7 @@ class AuthorImportJob implements ShouldQueue
     {
         $importHistory->increment('processed_records');
         $importHistory->increment('successful_records');
-        
+
         $this->checkIfCompleted($importHistory);
     }
 
@@ -74,11 +78,11 @@ class AuthorImportJob implements ShouldQueue
     {
         $importHistory->increment('processed_records');
         $importHistory->increment('failed_records');
-        
+
         $currentLog = $importHistory->error_log ?? '';
         $newLog = $currentLog . "\n" . date('Y-m-d H:i:s') . ": " . $errorMessage;
         $importHistory->update(['error_log' => trim($newLog)]);
-        
+
         $this->checkIfCompleted($importHistory);
     }
 
@@ -96,16 +100,16 @@ class AuthorImportJob implements ShouldQueue
             return null;
         }
 
-        try {   
+        try {
             $formats = ['Y-m-d', 'd/m/Y', 'd-m-Y', 'm/d/Y'];
-            
+
             foreach ($formats as $format) {
                 $parsed = \DateTime::createFromFormat($format, $date);
                 if ($parsed && $parsed->format($format) === $date) {
                     return $parsed->format('Y-m-d');
                 }
             }
-            
+
             return null;
         } catch (\Exception $e) {
             return null;

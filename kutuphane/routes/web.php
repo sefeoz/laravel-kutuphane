@@ -18,20 +18,20 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //dashboard protected routes
-Route::get('/dashboard', function (){
+Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth')->name('dashboard');
 
 //admin routes
-Route::middleware(['auth', 'admin'])->group(function(){
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('users', UserController::class);
-        Route::resource('authors', AuthorController::class)->except(['index','show']);
+    Route::resource('authors', AuthorController::class)->except(['index','show']);
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
-    
+
     // Bulk Import Routes
     Route::get('/bulk-import', [BulkImportController::class, 'index'])->name('bulk-import.index');
     Route::post('/bulk-import', [BulkImportController::class, 'store'])->name('bulk-import.store');
@@ -40,7 +40,7 @@ Route::middleware(['auth', 'admin'])->group(function(){
 });
 
 //book routes
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth'])->group(function () {
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
     Route::get('/books/search', [BookController::class, 'search'])->name('books.search');
     Route::get('/books/favorite', [BookController::class, 'showFavoriteBooks'])->name('books.favorite');

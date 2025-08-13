@@ -52,5 +52,3 @@ class StoreSeeder extends Seeder
         }
     }
 }
-
-

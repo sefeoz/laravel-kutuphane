@@ -12,12 +12,12 @@ use App\Enums\ImportStatus;
 
 class BulkImportController extends Controller
 {
-    public function index() : View
+    public function index(): View
     {
         return view('bulk-import.index');
     }
 
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
@@ -25,7 +25,7 @@ class BulkImportController extends Controller
 
         $file = $request->file('file');
         $originalName = $file->getClientOriginalName();
-        
+
         $path = $file->store('imports');
         $fullPath = Storage::path($path);
 
@@ -40,13 +40,13 @@ class BulkImportController extends Controller
             ->with('success', 'Import işlemi başlatıldı. İşlem tamamlandığında bilgilendirileceksiniz.');
     }
 
-    public function history() : View    
+    public function history(): View
     {
         $imports = ImportHistory::orderBy('created_at', 'desc')->paginate(10);
         return view('bulk-import.history', compact('imports'));
     }
 
-    public function show($id) : View
+    public function show($id): View
     {
         $import = ImportHistory::findOrFail($id);
         return view('bulk-import.show', compact('import'));

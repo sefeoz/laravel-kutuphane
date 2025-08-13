@@ -11,16 +11,16 @@ use Illuminate\Http\RedirectResponse;
 
 class AuthorController extends Controller
 {
-    public function index() : View
+    public function index(): View
     {
         $authors = Author::all();
         return view('authors.index', compact('authors'));
     }
-    public function create() : View
+    public function create(): View
     {
         return view('authors.create');
     }
-    public function store(AuthorStoreRequest $request) : RedirectResponse
+    public function store(AuthorStoreRequest $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -30,16 +30,16 @@ class AuthorController extends Controller
         Author::create($request->all());
         return redirect()->route('authors.index')->with('success', 'Yazar başarıyla eklendi');
     }
-    public function show(Author $author) : View
+    public function show(Author $author): View
     {
 
         return view('authors.show', compact('author'));
     }
-    public function edit(Author $author) : View
+    public function edit(Author $author): View
     {
         return view('authors.edit', compact('author'));
     }
-    public function update(AuthorUpdateRequest $request, Author $author) : RedirectResponse
+    public function update(AuthorUpdateRequest $request, Author $author): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -49,12 +49,12 @@ class AuthorController extends Controller
         $author->update($request->all());
         return redirect()->route('authors.index')->with('success', 'Yazar başarıyla güncellendi');
     }
-    public function destroy(Author $author) : RedirectResponse
+    public function destroy(Author $author): RedirectResponse
     {
         $author->delete();
         return redirect()->route('authors.index')->with('success', 'Yazar başarıyla silindi');
     }
-    public function search(Request $request) : View|RedirectResponse    
+    public function search(Request $request): View|RedirectResponse
     {
         $search = trim($request->input('search'));
 
