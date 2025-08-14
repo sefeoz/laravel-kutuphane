@@ -5,6 +5,8 @@ namespace App\Jobs;
 use App\Models\Author;
 use App\Models\ImportHistory;
 use App\DTOs\AuthorImportData;
+use App\Imports\Authors\ImportContext;
+use App\Imports\Authors\AuthorImportPipeline;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,26 +35,17 @@ class AuthorImportJob implements ShouldQueue
     {
         $importHistory = ImportHistory::findOrFail($this->importHistoryId);
 
-        $name = trim($this->authorData->name ?? '');
-        if (empty($name)) {
-            $this->updateFailedRecord($importHistory, 'Yazar adı boş');
-            return;
+        try {
+            $context = new ImportContext($this->authorData, $importHistory);
+            $pipeline = AuthorImportPipeline::build();
+            $pipeline->handle($context);
+
+            $this->updateSuccessfulRecord($importHistory);
+            Log::info("Yazar başarıyla oluşturuldu: {$this->authorData->name}");
+        } catch (\Throwable $e) {
+            $this->updateFailedRecord($importHistory, $e->getMessage());
+            Log::error('AuthorImportJob hata: '.$e->getMessage());
         }
-
-        $existingAuthor = Author::where('name', $name)->first();
-        if ($existingAuthor) {
-            $this->updateFailedRecord($importHistory, "Duplicate: '{$name}' zaten mevcut");
-            return;
-        }
-
-        $author = Author::create([
-            'name' => $name,
-            'bio' => $this->authorData->bio ?? null,
-            'birth_date' => $this->parseDate($this->authorData->birthDate ?? null),
-        ]);
-
-        $this->updateSuccessfulRecord($importHistory);
-        Log::info("Yazar başarıyla oluşturuldu: {$name} (ID: {$author->id})");
     }
 
     public function failed(\Throwable $exception)
@@ -94,25 +87,5 @@ class AuthorImportJob implements ShouldQueue
         }
     }
 
-    private function parseDate($date)
-    {
-        if (empty($date)) {
-            return null;
-        }
-
-        try {
-            $formats = ['Y-m-d', 'd/m/Y', 'd-m-Y', 'm/d/Y'];
-
-            foreach ($formats as $format) {
-                $parsed = \DateTime::createFromFormat($format, $date);
-                if ($parsed && $parsed->format($format) === $date) {
-                    return $parsed->format('Y-m-d');
-                }
-            }
-
-            return null;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
+    
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Events\UserRegistered;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -41,12 +42,13 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user',
         ]);
+        event(new UserRegistered($user));
 
         return redirect()->route('login')->with('success', 'Kayıt başarılı');
     }
