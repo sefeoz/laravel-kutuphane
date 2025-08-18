@@ -8,7 +8,13 @@
     <title>Kitaplar</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container mt-3">
+        @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
         @yield("content")
     </div>
 </body>
