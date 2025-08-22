@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BulkImportController;
 
 Route::get('/', function () {
     return view('index');
@@ -28,6 +29,14 @@ Route::middleware(['auth', 'admin'])->group(function(){
     Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{id}', [BookController::class, 'update'])->name('books.update');
     Route::delete('/books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
+    
+    // Bulk Import routes - Facade Pattern kullanıyor
+    Route::get('/bulk-import', [BulkImportController::class, 'index'])->name('bulk-import.index');
+    Route::get('/bulk-import/create', [BulkImportController::class, 'create'])->name('bulk-import.create');
+    Route::post('/bulk-import', [BulkImportController::class, 'store'])->name('bulk-import.store');
+    Route::get('/bulk-import/{importId}/status', [BulkImportController::class, 'showStatus'])->name('bulk-import.status');
+    Route::get('/bulk-import/{importId}/status-api', [BulkImportController::class, 'getStatus'])->name('bulk-import.status-api');
+    Route::get('/bulk-import/history', [BulkImportController::class, 'history'])->name('bulk-import.history');
 });
 
 //book routes
