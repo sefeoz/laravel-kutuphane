@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\BulkImportFacade;
 use Illuminate\Http\Request;
+use App\Http\Requests\BulkImportStoreRequest;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -35,19 +36,15 @@ class BulkImportController extends Controller
     /**
      * File upload ve import başlat - Facade sayesinde çok basit!
      */
-    public function store(Request $request)
+    public function store(BulkImportStoreRequest $request)
     {
-        $request->validate([
-            'file' => 'required|file|mimes:csv,xlsx,xls|max:5120', // 5MB
-            'import_type' => 'required|in:author,book',
-            'options' => 'sometimes|array'
-        ]);
+        $data = $request->validated();
 
         // Facade pattern - Tek method ile tüm karmaşık import süreci!
         $result = $this->importFacade->importFromFile(
             file: $request->file('file'),
-            type: $request->input('import_type'),
-            options: $request->input('options', [])
+            type: $data['import_type'],
+            options: $data['options'] ?? []
         );
 
         if ($result['success']) {
