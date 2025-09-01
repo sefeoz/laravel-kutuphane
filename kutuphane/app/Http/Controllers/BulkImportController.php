@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\BulkImportFacade;
 use Illuminate\Http\Request;
 use App\Http\Requests\BulkImportStoreRequest;
+use App\Models\ImportHistory;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -62,9 +63,9 @@ class BulkImportController extends Controller
     /**
      * Import durumunu göster - Facade ile basit sorgulama
      */
-    public function showStatus(int $importId)
+    public function showStatus(ImportHistory $importHistory)
     {
-        $status = $this->importFacade->getImportStatus($importId);
+        $status = $this->importFacade->getImportStatus($importHistory->id);
         
         if (!$status['success']) {
             return redirect()
@@ -72,15 +73,16 @@ class BulkImportController extends Controller
                 ->with('error', $status['message']);
         }
 
+        $importId = $importHistory->id;
         return view('bulk-import.status', compact('status', 'importId'));
     }
 
     /**
      * AJAX - Import durumu
      */
-    public function getStatus(int $importId): JsonResponse
+    public function getStatus(ImportHistory $importHistory): JsonResponse
     {
-        $status = $this->importFacade->getImportStatus($importId);
+        $status = $this->importFacade->getImportStatus($importHistory->id);
         return response()->json($status);
     }
 

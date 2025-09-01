@@ -34,8 +34,8 @@ Route::middleware(['auth', 'admin'])->group(function(){
     Route::get('/bulk-import', [BulkImportController::class, 'index'])->name('bulk-import.index');
     Route::get('/bulk-import/create', [BulkImportController::class, 'create'])->name('bulk-import.create');
     Route::post('/bulk-import', [BulkImportController::class, 'store'])->name('bulk-import.store');
-    Route::get('/bulk-import/{importId}/status', [BulkImportController::class, 'showStatus'])->name('bulk-import.status');
-    Route::get('/bulk-import/{importId}/status-api', [BulkImportController::class, 'getStatus'])->name('bulk-import.status-api');
+    Route::get('/bulk-import/{importHistory}/status', [BulkImportController::class, 'showStatus'])->name('bulk-import.status');
+    Route::get('/bulk-import/{importHistory}/status-api', [BulkImportController::class, 'getStatus'])->name('bulk-import.status-api');
     Route::get('/bulk-import/history', [BulkImportController::class, 'history'])->name('bulk-import.history');
 });
 
