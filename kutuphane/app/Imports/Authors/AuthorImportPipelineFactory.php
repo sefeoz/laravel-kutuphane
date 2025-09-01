@@ -13,10 +13,10 @@ class AuthorImportPipelineFactory extends AbstractImportPipelineFactory
 {
     public function createPipeline(): HandlerInterface
     {
-        $validate = new ValidateHandler();
-        $normalize = new NormalizeHandler();
-        $duplicate = new DuplicateCheckHandler();
-        $persist = new PersistHandler();
+        $validate = app(ValidateHandler::class);
+        $normalize = app(NormalizeHandler::class);
+        $duplicate = app(DuplicateCheckHandler::class);
+        $persist = app(PersistHandler::class);
 
         $validate->setNext($normalize)
             ->setNext($duplicate)

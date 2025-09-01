@@ -13,11 +13,10 @@ class BookImportPipelineFactory extends AbstractImportPipelineFactory
 {
     public function createPipeline(): HandlerInterface
     {
-        // Book import'lar için farklı handler sırası
-        $validate = new BookValidateHandler();
-        $normalize = new BookNormalizeHandler();
-        $duplicate = new BookDuplicateCheckHandler();
-        $persist = new BookPersistHandler();
+        $validate = app(BookValidateHandler::class);
+        $normalize = app(BookNormalizeHandler::class);
+        $duplicate = app(BookDuplicateCheckHandler::class);
+        $persist = app(BookPersistHandler::class);
 
         // Book'larda farklı bir akış olabilir
         $validate->setNext($normalize)
